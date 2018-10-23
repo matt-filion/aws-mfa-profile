@@ -8,9 +8,11 @@ const CREDENTIAL_PATH = '.aws/credentials'
 
 class Credentials {
 
-  constructor(){
+  constructor(profiles){
     this.credentialsPath = path.join(os.homedir(),CREDENTIAL_PATH);
-    this.credentials     = {};    
+    this.mfaProfileName  = profiles.getMFAProfileName();
+    this.profileName     = profiles.getAWSProfileName();
+    this.credentials     = {};
   }
 
   /**
@@ -58,25 +60,30 @@ class Credentials {
         return credentials;
 
       },{})
+
     return Promise.resolve();
   }
 
+  getAWSAuthority(){
+    return this.credentials[this.profileName];
+  }
+
   getDevice(){
-    if(this.credentials['mfa']) return this.credentials['mfa']['serial_number'];
+    if(this.credentials[this.mfaProfileName]) return this.credentials[this.mfaProfileName]['serial_number'];
     return null;
   }
   
   setDevice(deviceSerialNumber){
-    if(!this.credentials['mfa']) this.credentials['mfa'] = {};
-    this.credentials['mfa']['serial_number'] = deviceSerialNumber;
+    if(!this.credentials[this.mfaProfileName]) this.credentials[this.mfaProfileName] = {};
+    this.credentials[this.mfaProfileName]['serial_number'] = deviceSerialNumber;
   }
 
   setSession(session){
 
-    this.credentials['mfa']['aws_access_key_id']     = session.AccessKeyId;
-    this.credentials['mfa']['aws_secret_access_key'] = session.SecretAccessKey;
-    this.credentials['mfa']['aws_session_token']     = session.SessionToken;
-    this.credentials['mfa']['expiration']            = session.Expiration.toISOString();
+    this.credentials[this.mfaProfileName]['aws_access_key_id']     = session.AccessKeyId;
+    this.credentials[this.mfaProfileName]['aws_secret_access_key'] = session.SecretAccessKey;
+    this.credentials[this.mfaProfileName]['aws_session_token']     = session.SessionToken;
+    this.credentials[this.mfaProfileName]['expiration']            = session.Expiration.toISOString();
 
     return Promise.resolve();
   }

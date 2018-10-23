@@ -1,6 +1,6 @@
 {
   "name": "aws-mfa-profile",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Helper class to make MFA authentication easier, when its required for local development.",
   "main": "src/index.js",
   "bin": {

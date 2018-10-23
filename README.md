@@ -26,9 +26,12 @@ Respond to the prompt with the 'Assigned MFA device' value of your IAM profile p
 
 Next, supply a token from your MFA device.
 
-      To use your session, use the profile mfa via --profile mfa
+      To use your session, use the profile mfa via --profile default-mfa (serverles is --aws-profile default-mfa)
 
-When its complete you will see a message indicating you should use ``--profile mfa``. So for all of your AWS commands (or serverless.com commands) you will provide ``--profile mfa`` as an argument.
+When its complete you will see a message indicating you should use ``--profile default-mfa``. So for all of your AWS commands (or serverless.com commands) you will provide ``--profile default-mfa`` as an argument.
+
+# Different Profiles
+You can provide --profile as an argument to select a different profile to authenticate with. The MFA token will base its name off of this value, so if the profile you provide is 'foo' then the mfa credentials will be saved under 'foo-mfa'.
 
 # Caching?
 Nope, each time you run it, it will overwrite the current MFA configuration.
@@ -41,9 +44,12 @@ This file is used to create the token and is then udpated with an additional pro
       aws_secret_access_key = SOME_SECRET_ACCESS_KEY
 
 
-      [mfa]
+      [default-mfa]
       serial_number = arn:aws:iam::YOUR_ACCOUNT_ID:mfa/USERNAME
       aws_access_key_id = SOME_ACCESS_KEY_ID
       aws_secret_access_key = SOME_SECRET_ACCESS_KEY
       aws_session_token = SOME_BIG_LONG_SESSION_ID
       expiration = 2018-10-23T14:06:33.000Z
+
+# Resource
+https://aws.amazon.com/premiumsupport/knowledge-center/authenticate-mfa-cli/

@@ -4,7 +4,14 @@ const AWS = require('aws-sdk');
 
 class AWSSTS {
   constructor(){
-    this.sts = new AWS.STS()
+  }
+
+  init(credentials){
+    const authority = credentials.getAWSAuthority();
+    this.sts = new AWS.STS({
+      accessKeyId: authority['aws_access_key_id'],
+      secretAccessKey: authority['aws_secret_access_key']
+    });
   }
 
   getSession(deviceSerialNumber,token){

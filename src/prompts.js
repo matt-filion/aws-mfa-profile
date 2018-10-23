@@ -9,16 +9,13 @@ const prompt            = readline.createInterface({
 
 class Prompts{
 
-  constructor(){
+  constructor(profiles){
+    this.awsProfileName = profiles.getAWSProfileName();
   }
 
   start(){
-    console.log("Starting...");
+    console.log(`Getting setting up MFA using your [${this.awsProfileName}] AWS profile.`);
     return Promise.resolve();
-  }
-
-  close(){
-    prompt.close();
   }
 
   askForToken() {
@@ -56,6 +53,10 @@ class Prompts{
 
       prompt.question('What is your MFA device ID? It should be in the format arn:aws:iam::ACCOUNT_ID:mfa/USERNAME.\n>', handle_arn_input);
     })
+  }
+
+  close(){
+    prompt.close();
   }
 }
 
